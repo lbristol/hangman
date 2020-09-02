@@ -36,6 +36,9 @@ class game:
         # win/loss
         self.winstate = 0
 
+        # quit?
+        self.quitstate = 0
+
     # clear console
     def clear(self):
         _ = os.system("clear")
@@ -61,6 +64,7 @@ class game:
             self.clear()
             if self.tries < 1:
                 self.clear()
+                self.letters = ["_" if y in self.answer.upper() else y for y in self.letters]
                 self.progdisplay()
                 print("\n \nYou lost! \n \n")
                 self.winstate = 2
@@ -73,8 +77,13 @@ class game:
                 return
             self.progdisplay()
             print("\n \nPlease guess a letter (if you guess a whole word, make it count! You could lose a try): ")
-            x = input("[Enter /stats to see your previous wins/losses] ")
-            if x == "/stats":
+            x = input("[Enter /stats to see your previous wins/losses or /quit to quit the game] ")
+            if x == "/quit":
+                self.clear()
+                print("\n \n \nThanks for playing! \n \n")
+                self.quitstate = 1
+                return
+            elif x == "/stats":
                 self.clear()
                 self.progdisplay()
                 print("\n \nGame | W/L")
@@ -133,7 +142,7 @@ while True:
     play.clear()
     play.__init__()
     play.guess()
-    while True:
+    while play.quitstate < 1:
         x = input("\n \nWould you like to play again? (y/n): ")
         if x.upper() in ("Y", "N"):
             if x.upper() == "Y":
